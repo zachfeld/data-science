@@ -25,7 +25,7 @@ It specifies either a directory or a specific file, and it serves as a way to id
 On unix based systems, file paths are displayed as such:
 `/{dir}/{dir}/{dir/file}`
 
-All drives are mounted into a single unified path, which is called **root** and it is represented by the forward slash: `\`
+All drives are mounted into a single unified path, which is called **root** and it is represented by the forward slash: `/`
 
 ## Navigating in the Terminal
 
