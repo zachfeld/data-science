@@ -1,9 +1,9 @@
 import pandas as pd
 
 ## import data
-election_2016 = pd.read_csv('Project 1\election_2016.csv')
-covid_county = pd.read_csv('Project 1\covid_confirmed_usafacts.csv')
-population_county = pd.read_csv('Project 1\covid_county_population_usafacts.csv')
+election_2016 = pd.read_csv('election_2016.csv')
+covid_county = pd.read_csv('covid_confirmed_usafacts.csv')
+population_county = pd.read_csv('covid_county_population_usafacts.csv')
 
 ## Group data by State, not county
 covid_state = covid_county.groupby('State').sum()
