@@ -48,8 +48,12 @@ def bad_guess (data):
 from scipy.optimize import curve_fit
 import  matplotlib.pyplot as plt
 
-# but all of our guessed betas into the dataframe
+# put all of our guessed betas into the dataframe
 data = bad_guess(df)
+
+# create new dataframe to store found betas in
+new_betas = pd.DataFrame(data.index)
+new_betas = new_betas.set_index('State')
 
 # loop through every state in the data frame
 indicies = data.index
@@ -67,13 +71,34 @@ for index in indicies:
 
         found_betas, covariance = curve_fit( logistic_curve, xs, ys.astype('int'), p0=my_guessed_betas )
         β0, β1, β2 = found_betas
-        print(covariance)
+        print(f'{index} ', covariance) # add state to print along covariance
+        new_betas.loc[index, 'β0'] = β0
+        new_betas.loc[index, 'β1'] = β1
+        new_betas.loc[index, 'β2'] = β2
     except Exception as e:
         print(f'state: {index}: ', e)
-
+        pass
+#print(new_betas)
+# ~~~~~~   Question 4 - Correlation between political leaning and variables   ~~~~~~
 # for problem 5, we need to make a dataframe with pop, clinton, trump, all 3 of the calculated b's, 
 # most recent number of cases, most recent number of cases per cap, political leaning ratio
-
+corr_data = pd.DataFrame(data.index)
+corr_data = corr_data.set_index('State')
+### population column (for per capita)
+corr_data['Population'] = df['population']
+### political leaning
+corr_data['D/R Ratio'] = round(df['Clinton'] / df['Trump'], 3)
+### most recent number of cases + per capita
+corr_data['Recent Cases'] = df['9/8/20'] # change to a not hard-coded column value later
+corr_data['Recent Cases per Capita'] = round(corr_data['Recent Cases'] / corr_data['Population'] * 1000000, 3) # multiply by 1 mil, per 1 mil people
+### Projected Max Number of Cases = β0, and capita
+corr_data['Projected Max Cases'] = new_betas['β0']
+corr_data['Projected Max Cases per Capita'] = round(corr_data['Projected Max Cases'] / corr_data['Population'] * 1000000, 3)
+### rate of increase = β1
+corr_data['Rate of Increase'] = new_betas['β1']
+### time of maximum increase = β2
+corr_data['Time of maximum increase'] = new_betas['β2']
+print(corr_data)
 
 
 ## Export to Excel for viewing
