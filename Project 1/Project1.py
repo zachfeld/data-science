@@ -79,7 +79,7 @@ for index in indicies:
         print(f'state: {index}: ', e)
         pass
 #print(new_betas)
-# ~~~~~~   Question 4 - Correlation between political leaning and variables   ~~~~~~
+# ~~~~~~   Question 5 - Correlation between political leaning and variables   ~~~~~~
 # for problem 5, we need to make a dataframe with pop, clinton, trump, all 3 of the calculated b's, 
 # most recent number of cases, most recent number of cases per cap, political leaning ratio
 corr_data = pd.DataFrame(data.index)
@@ -98,7 +98,46 @@ corr_data['Projected Max Cases per Capita'] = round(corr_data['Projected Max Cas
 corr_data['Rate of Increase'] = new_betas['β1']
 ### time of maximum increase = β2
 corr_data['Time of maximum increase'] = new_betas['β2']
-print(corr_data)
+
+
+
+corr_data = corr_data.drop('Population', axis=1)
+corr_data = corr_data.drop(['HI'])
+correlation_coefficients = np.corrcoef( corr_data, rowvar=False )
+
+# the graphing is commented out here to not pause the script on run
+'''
+import seaborn as sns
+sns.heatmap( correlation_coefficients, annot=True )
+plt.xticks( np.arange(7)+0.5, corr_data.columns )
+plt.yticks( np.arange(7)+0.5, corr_data.columns, rotation=0 )
+plt.show()
+'''
+
+
+# ~~~~~~   Question 6 - Hypothesis test    ~~~~~~
+# We are testing for the difference in mean number of days of max increase/spread between democratic and republican states
+# This is a two sided test, where our first sample is the democratic states' beta 2 (time of max spread)
+# And our second sample is the republican states' beta 2
+
+α = 0.05
+# boiling down our data set to the democratic & republican leaning states
+dem_leaning = corr_data[corr_data['D/R Ratio'] > 1]
+gop_leaning = corr_data[corr_data['D/R Ratio'] < 1]
+
+sample1 = dem_leaning['Time of maximum increase']
+sample2 = gop_leaning['Time of maximum increase']
+
+import scipy.stats as stats
+t_statistics, p_value = stats.ttest_ind(sample1, sample2)
+
+reject_H0 = p_value < α
+print(α, p_value, reject_H0)
+
+# Our output is [0.05 2.5011897072328965e-05 True]
+# Therefore, we can say that the two samples give us enough information to reject H0
+# Democratic and Republican states have different means time of maximum increase since the pandemic started
+
 
 
 ## Export to Excel for viewing
