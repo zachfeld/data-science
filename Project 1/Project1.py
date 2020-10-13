@@ -22,6 +22,8 @@ exclude_counties = ['countyFIPS_x', 'countyFIPS_y', 'stateFIPS']
 df = df.loc[:, ~df.columns.isin(exclude_counties)]
 #print(df.columns)
 
+# pickle our dataset here
+df.to_pickle('project-1-dataset.pkl')
 
 # ~~~~~~   Question 4 - Applying a SciPy's curve fit function   ~~~~~~
 ## Apply SciPy curve_fit function to each row, returning three beta values for each row,
@@ -138,8 +140,3 @@ print(α, p_value, reject_H0)
 # Our output is [0.05 2.5011897072328965e-05 True]
 # Therefore, we can say that the two samples give us enough information to reject H0
 # Democratic and Republican states have different means time of maximum increase since the pandemic started
-
-
-
-## Export to Excel for viewing
-#df.to_excel(r'Project 1\state_election_covid.xlsx')
