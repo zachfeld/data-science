@@ -108,9 +108,10 @@ correlation_coefficients = np.corrcoef( corr_data, rowvar=False )
 # the graphing is commented out here to not pause the script on run
 '''
 import seaborn as sns
+plt.figure(figsize=(12,8))
 sns.heatmap( correlation_coefficients, annot=True )
-plt.xticks( np.arange(7)+0.5, corr_data.columns )
-plt.yticks( np.arange(7)+0.5, corr_data.columns, rotation=0 )
+plt.xticks( np.arange(7)+0.5, corr_data.columns, rotation = 35 )
+plt.yticks( np.arange(7)+0.5, corr_data.columns, rotation = 0 )
 plt.show()
 '''
 
