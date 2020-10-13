@@ -91,8 +91,8 @@ corr_data['Population'] = df['population']
 ### political leaning
 corr_data['D/R Ratio'] = round(df['Clinton'] / df['Trump'], 3)
 ### most recent number of cases + per capita
-corr_data['Recent Cases'] = df['9/8/20'] # change to a not hard-coded column value later
-corr_data['Recent Cases per Capita'] = round(corr_data['Recent Cases'] / corr_data['Population'] * 1000000, 3) # multiply by 1 mil, per 1 mil people
+corr_data['Recent Cases'] = df['9/8/20'] # most recent date
+corr_data['Recent Cases per Capita'] = round(corr_data['Recent Cases'] / corr_data['Population'] * 1000000, 3) # multiply by 1 mil, so x cases per 1 mil people
 ### Projected Max Number of Cases = β0, and capita
 corr_data['Projected Max Cases'] = new_betas['β0']
 corr_data['Projected Max Cases per Capita'] = round(corr_data['Projected Max Cases'] / corr_data['Population'] * 1000000, 3)
@@ -102,7 +102,8 @@ corr_data['Rate of Increase'] = new_betas['β1']
 corr_data['Time of maximum increase'] = new_betas['β2']
 
 
-
+# Drop Population column to make heatmap between relevant columns
+# Drop Hawaii row because NaN values aren't working with the heatmap for some reason
 corr_data = corr_data.drop('Population', axis=1)
 corr_data = corr_data.drop(['HI'])
 correlation_coefficients = np.corrcoef( corr_data, rowvar=False )
